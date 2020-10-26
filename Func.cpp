@@ -9,7 +9,7 @@ bool ReadInput(ConfigSet &ConfigInput, const char* ConfigPath)
 	ifstream ConfigFile(ConfigPath);
 	if (!ConfigFile)
 	{
-		cout << "The path dose not existed! Please check it!" << endl;
+		cout << "The path " << ConfigPath << " does not exist! Please check it!" << endl;
 		return false;
 	}
 	bool GoOnReading = 1;
@@ -45,7 +45,7 @@ bool ReadInput(ConfigSet &ConfigInput, const char* ConfigPath)
 		char*keyword = word[0];
 		if (!strcmp(keyword, "masterpath"))
 		{
-
+			cout << word[1] << endl;
 			ConfigInput.masterpath = word[1];
 
 		}
@@ -59,12 +59,6 @@ bool ReadInput(ConfigSet &ConfigInput, const char* ConfigPath)
 		{
 
 			ConfigInput.firstsubswath = atoi(word[1]);
-
-		}
-		else if (!strcmp(keyword, "lastsubswath"))
-		{
-
-			ConfigInput.lastsubswath = atoi(word[1]);
 
 		}
 		else if (!strcmp(keyword, "lastsubswath"))
@@ -134,25 +128,37 @@ bool ReadInput(ConfigSet &ConfigInput, const char* ConfigPath)
 /*****************************************************************/
 bool S1_Initialize(SentinelTOPS& S1, const char* Path, string polar)
 {
-	string polarFlag = "-slc-" + polar;
-	string imgpath = string(Path) + "\\measurement";
+	cout << "In S1_Initialize" << endl;
+	cout << "Using " << Path << endl;
+
+	string imgpath = string(Path).append("/measurement");
 
 	string ImgFiles[12];
-	int NumImg;
+	int NumImg = 0;
 
-	NumImg = GetFiles(imgpath, ImgFiles, polar);
+	NumImg = GetSortedFiles(imgpath, ImgFiles, polar);
 	S1.NumSubSwath = NumImg;
-	string XmlFiles[12];
-	int NumXml;
 
-	string xmlpath = string(Path) + "\\annotation";
-	NumXml = GetFiles(xmlpath, XmlFiles, polar);
+	cout << "SubSwath found for " << imgpath << endl;
+	for (int i = 0; i < NumImg; i++) {
+		cout << i << ": " << ImgFiles[i] << endl;
+	}
+
+
+	string XmlFiles[12];
+	int NumXml = 0;
+
+	string xmlpath = string(Path).append("/annotation");
+	NumXml = GetSortedFiles(xmlpath, XmlFiles, polar);
+
+	cout << "Annotations found for " << xmlpath << endl;
+	for (int i = 0; i < NumXml; i++) {
+		cout << i << ": " << XmlFiles[i] << endl;
+	}
 
 	//Set the lat/lon box of the frame
 	S1.lat_max = S1.lon_max = -999;
 	S1.lat_min = S1.lon_min = 999;
-
-
 
 	if (NumImg <= 0)
 	{
@@ -161,13 +167,13 @@ bool S1_Initialize(SentinelTOPS& S1, const char* Path, string polar)
 		exit(0);
 	}
 
-
 	if (NumXml < NumImg)
 	{
 		cout << "annotation xml files not equal numOfSubSwath \n";
 		system("pause");
 		exit(0);
 	}
+
 	S1.SubSwath = new SubSwathInfo[NumImg];
 
 	for (int i = 0; i < NumImg; i++)
@@ -177,27 +183,27 @@ bool S1_Initialize(SentinelTOPS& S1, const char* Path, string polar)
 	}
 
 
-	if (strcmp(S1.SubSwath[0].ImgPath.c_str(), "S1A") != NULL)
+	if (strcmp(S1.SubSwath[0].ImgPath.c_str(), "S1A") != 0)
 	{
 		S1.MissionID = "S1A";
 	}
-	else if (strcmp(S1.SubSwath[0].ImgPath.c_str(), "S1B") != NULL)
+	else if (strcmp(S1.SubSwath[0].ImgPath.c_str(), "S1B") != 0)
 	{
 		S1.MissionID = "S1B";
 	}
 	else
 	{
-		cout << "Unkown Input SLC , It's assumed to be S1A or S1B!" << endl;
+		cout << "Unknown Input SLC. It's assumed to be S1A or S1B!" << endl;
 		system("pause");
 		exit(0);
 	}
+
+	cout << "Start XML Parsing" << endl;
 
 	double SumRangeSpacing = 0.0;
 	double SumAzimuthSpacing = 0.0;
 	for (int i = 0; i < NumImg; i++)
 	{
-
-
 		XMLDocument xmldoc;
 
 		bool LoadOK = xmldoc.LoadFile(XmlFiles[i].c_str());
@@ -244,7 +250,7 @@ bool S1_Initialize(SentinelTOPS& S1, const char* Path, string polar)
 		node = elem->FirstChild();
 		S1.SubSwath[i].azimuthTimeInterval = atof(node->Value());
 
-		//Range Pixel Spacing 
+		//Range Pixel Spacing
 		elem = root->FirstChildElement("imageAnnotation")->FirstChildElement("imageInformation")->FirstChildElement("rangePixelSpacing");
 		node = elem->FirstChild();
 		S1.SubSwath[i].rangePixelSpacing = atof(node->Value());
@@ -405,9 +411,6 @@ bool S1_Initialize(SentinelTOPS& S1, const char* Path, string polar)
 			S1.SubSwath[i].firstValidLine[k] = firstValidLineIdx;
 			S1.SubSwath[i].lastValidLine[k] = lastValidLineIdx;
 
-
-
-
 			elem1 = elem1->NextSiblingElement();
 		}
 
@@ -464,7 +467,6 @@ bool S1_Initialize(SentinelTOPS& S1, const char* Path, string polar)
 		}
 
 
-
 		S1.SubSwath[i].numOfGeoLines = numOfLocationPoints / numOfGeoPointsPerLine;
 		S1.SubSwath[i].numOfGeoPointsPerLine = numOfGeoPointsPerLine;
 
@@ -499,12 +501,6 @@ bool S1_Initialize(SentinelTOPS& S1, const char* Path, string polar)
 
 			str = elem1->FirstChildElement("incidenceAngle")->GetText();
 			S1.SubSwath[i].incidenceAngle[row*Pixels + col] = atof(str.c_str());
-
-
-
-
-
-
 
 			elem1 = elem1->NextSiblingElement();
 		}
@@ -557,14 +553,11 @@ bool S1_Initialize(SentinelTOPS& S1, const char* Path, string polar)
 		}
 		/************************************************************/
 
-
-
-
-
 		xmldoc.Clear();
 
 	}
 
+	cout << "Done XML Parsing" << endl;
 
 
 	S1.azimuthSpacing = SumAzimuthSpacing / NumImg;
@@ -574,54 +567,59 @@ bool S1_Initialize(SentinelTOPS& S1, const char* Path, string polar)
 }
 
 /*****************************************************************/
-/*find S1 images and xml files                                   */
+/*find files in a directory                                      */
 /*****************************************************************/
-int GetFiles(string path, string * files, string polar)
+int GetFiles(const string& path, string * files, const string polar)
 {
-	//Handle  
-	intptr_t   hFile = 0;
-	//文件信息  
-	struct _finddata_t fileinfo;
-
-	string p;
 	int i = 0;
-	if ((hFile = _findfirst(p.assign(path).append("\\*").c_str(), &fileinfo)) != -1)
-	{
+	cout << "In GetFiles" << endl;
+	cout << "Using " << path << endl;
 
-
-
-
-		do
-		{
-			//如果是目录,迭代之  
-			//如果不是,加入列表  
-			if ((fileinfo.attrib &  _A_SUBDIR))
-			{
-
-				continue;
-				//if (strcmp(fileinfo.name, ".") != 0 && strcmp(fileinfo.name, "..") != 0)
-				//	getFiles(p.assign(path).append("\\").append(fileinfo.name), files);
-			}
-			else
-			{
-				string Temp;
-				Temp.assign(path).append("\\").append(fileinfo.name);
-				if (Temp.find(polar) != string::npos)
-				{
-					files[i] = Temp;
-					i++;
-				}
-
-
-			}
-
-		} while (_findnext(hFile, &fileinfo) == 0);
-
-		_findclose(hFile);
+	DIR* dirp = opendir(path.c_str());
+	struct dirent * dp;
+	while ((dp = readdir(dirp)) != NULL) {
+    if (dp->d_type != DT_DIR) {
+		  string fname = dp->d_name;
+		  if (fname.find(polar) != string::npos) {
+			  files[i] = string(path.c_str()) + "/" + fname;
+        i++;
+	    }
+		}
 	}
+	closedir(dirp);
 	return i;
 }
 
+/*****************************************************************/
+/*find files in a directory                                      */
+/*****************************************************************/
+int GetSortedFiles(const string& path, string * files, const string polar)
+{
+	int i = 0;
+	cout << "In GetSortedFiles" << endl;
+	cout << "Using " << path << endl;
+
+	struct dirent **namelist;
+	int j, n;
+
+	n = scandir(string(path).c_str(), &namelist, 0, versionsort);
+	if (n < 0)
+		return 0;
+	else
+	{
+		for(j = 0; j < n; ++j)
+		{
+			if (namelist[j]->d_type !=DT_DIR) {
+				string fname = namelist[j]->d_name;
+				if (fname.find(polar) != string::npos) {
+					files[i] = string(path.c_str()) + "/" + fname;
+					i++;
+				}
+			}
+		}
+		return i;
+	}
+}
 
 /*****************************************************************/
 /*Read orbit and fit orbit with polynomial                       */
@@ -660,11 +658,11 @@ void getIntArray(string str, char gap, int *Array)
 int DiffUTCTime(string firstUTC, string lastUTC)
 {
 	int years1, months1, days1, hours1, mins1, secs1;
-	sscanf_s(firstUTC.c_str(), "%d-%d-%dT%d:%d:%d", &years1, &months1,
+	sscanf(firstUTC.c_str(), "%d-%d-%dT%d:%d:%d", &years1, &months1,
 		&days1, &hours1, &mins1, &secs1);
 
 	int years11, months11, days11, hours11, mins11, secs11;
-	sscanf_s(lastUTC.c_str(), "%d-%d-%dT%d:%d:%d", &years11, &months11,
+	sscanf(lastUTC.c_str(), "%d-%d-%dT%d:%d:%d", &years11, &months11,
 		&days11, &hours11, &mins11, &secs11);
 
 	int secInday = 60 * 60 * 24;
@@ -700,17 +698,20 @@ void getDoubleArray(string str, char gap, double *Array)
 }
 
 
-
 bool S1_OrbitInitialize(S1PreciseOrbit &Orbit,
 	const  char * Path, const char *firstUTC, const char *lastUTC, string MissionID)
 {
+	cout << "In S1_OrbitInitialize" << endl;
+	cout << Path << endl;
+	cout << firstUTC << endl;
+	cout << lastUTC << endl;
+	cout << MissionID << endl;
 
-	CheckOribtFile(Path, firstUTC, MissionID);
+	CheckOrbitFile(Path, firstUTC, MissionID);
 
 	int years, months, days, hours, mins, secs;
 	char buff[100];
-	sscanf_s(firstUTC, "%d-%d-%dT%d:%d:%d", &years, &months,
-		&days, &hours, &mins, &secs);
+	sscanf(firstUTC, "%d-%d-%dT%d:%d:%d", &years, &months, &days, &hours, &mins, &secs);
 
 	sprintf(buff, "%04d-%02d-%02dT%02d:%02d:%01d", years, months, days, hours, mins, secs / 10);
 	string firstUTCtime = buff;
@@ -815,7 +816,7 @@ bool S1_OrbitInitialize(S1PreciseOrbit &Orbit,
 
 	return true;
 
-	
+
 }
 
 time_t strTime2unix(const char*timeStamp)
@@ -843,53 +844,28 @@ time_t minusDay(time_t time1, int days)
 
 }
 
-bool CheckOribtFile(string PreciseOrbit, string UTCtime, string MissionID)
+bool CheckOrbitFile(string PreciseOrbit, string UTCtime, string MissionID)
 {
-	int monthDays[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
-
 	//Check Date
 	char buff[100];
 	char buff1[100];
 
 	int years, months, days, hours, mins, secs;
 
-	sscanf_s(UTCtime.c_str(), "%d-%d-%dT%d:%d:%d", &years, &months,
+	sscanf(UTCtime.c_str(), "%d-%d-%dT%d:%d:%d", &years, &months,
 		&days, &hours, &mins, &secs);
 
-	
 	time_t t_unix = strTime2unix(UTCtime.c_str());
-	
-	
 	time_t t_unix_before = minusDay(t_unix, 1);
-	
 
 	struct tm *p_before = gmtime(&t_unix_before);
 
-
 	strftime(buff, sizeof(buff), "%Y%m%d", p_before);
-
-	
 
 	time_t t_unix_after = addDay(t_unix, 1);
 	struct tm *p_after = gmtime(&t_unix_after);
 
-	
-
-
 	strftime(buff1, sizeof(buff1), "%Y%m%d", p_after);
-	
-
-
-
-
-	
-		//sprintf(buff, "%04d%02d%02d", years, months, days - 1);
-	
-	
-		//sprintf(buff, "%04d%02d%02d", years, months-1, monthDays[months - 1-1]);
-	
-
-	//sprintf(buff1, "%04d%02d%02d", years, months, days + 1);
 
 	string str_start, str_end;
 	int length = PreciseOrbit.length();
@@ -897,27 +873,12 @@ bool CheckOribtFile(string PreciseOrbit, string UTCtime, string MissionID)
 	str_start = PreciseOrbit.substr(length - 35, 8);
 	str_end = PreciseOrbit.substr(length - 19, 8);
 
-	
-
-
-	
-
-
-	if ((str_start != string(buff) || str_end != string(buff1))
-		)
+	if (str_start != string(buff) || str_end != string(buff1))
 	{
 		cout << "The date of file is not valid. Please check it." << endl;
-		
 		return false;
 	}
-	
 
-
-	if (strstr(PreciseOrbit.c_str(), MissionID.c_str()) == NULL)
-	{
-		cout << "Mission is not mathched! Please check!." << endl;
-		return false;
-	}
 
 	FILE *fp = fopen(PreciseOrbit.c_str(), "r");
 	if (!fp) return -1;
@@ -929,11 +890,13 @@ bool CheckOribtFile(string PreciseOrbit, string UTCtime, string MissionID)
 	{
 		cout << "The volume of data file is not correct! Please check!." << endl;
 		return false;
-
 	}
 
-
-	return 1;
+	if (strstr(PreciseOrbit.c_str(), MissionID.c_str()) == NULL)
+	{
+		cout << "WARNING: Master/Slave set up combines S1A and S1B!" << endl;
+	}
+	return true;
 }
 
 
@@ -1153,7 +1116,7 @@ double getLatitude(SentinelTOPS& S1, double aztime, double rgtime, int SubSwathI
 
 }
 
-double getLontitude(SentinelTOPS& S1, double aztime, double rgtime, int SubSwathID)
+double getLongitude(SentinelTOPS& S1, double aztime, double rgtime, int SubSwathID)
 {
 
 	int Index[4];
@@ -1359,7 +1322,7 @@ double xyz2aztime(double *xyz, int NumOfCoef,
 	double dsat_P[3];
 	for (iter = 0; iter <= 10; ++iter)           // break at convergence
 	{
-		//  Update equations 
+		//  Update equations
 		double normalized_Aztime = (aztime - midAztime) / 10.0;
 		getXyz(normalized_Aztime, possat, coef_x, coef_y, coef_z, NumOfCoef);
 		getVelocity(normalized_Aztime, velsat, coef_x, coef_y, coef_z, NumOfCoef);
@@ -1368,7 +1331,7 @@ double xyz2aztime(double *xyz, int NumOfCoef,
 		dsat_P[1] = xyz[1] - possat[1];
 		dsat_P[2] = xyz[2] - possat[2];
 
-		//  Update solution 
+		//  Update solution
 
 		sol = -(velsat[0] * dsat_P[0] + velsat[1] * dsat_P[1] + velsat[2] * dsat_P[2]) /
 			((accsat[0] * dsat_P[0] + accsat[1] * dsat_P[1] + accsat[2] * dsat_P[2])
@@ -1385,7 +1348,7 @@ double xyz2aztime(double *xyz, int NumOfCoef,
 
 }
 
-/* 
+/*
 The following codes are modified from Doris
 add by ysli,201905 @ Newcastle Uni.
 */
@@ -1413,22 +1376,22 @@ int getxyz(double *satpos, S1PreciseOrbit  &orb, double t) // const // not, klo,
 	int interp_method = 0;
 
 	interp_method = (orb.NumPoints>6) ? 5 : orb.NumPoints - 2;
-	 
-	//const double t_tmp = (t - time[numberofpoints / 2]) / real8(10.0);     
+
+	//const double t_tmp = (t - time[numberofpoints / 2]) / real8(10.0);
 	double t_tmp = (t - orb.orbitAzTime[orb.NumPoints / 2]) / 10.0;
- 
-		
+
+
 		satpos[0] = polyval1d(t_tmp, orb.coef_x, interp_method + 1);
 		satpos[1] = polyval1d(t_tmp, orb.coef_y, interp_method + 1);
 		satpos[2] = polyval1d(t_tmp, orb.coef_z, interp_method + 1);
-	 
+
 	return 0;
 } // END getxyz
 
 
 int getxyzdot(double *velsat, S1PreciseOrbit  &orb, double t)
 {
-	
+
 	 int interp_method = 0;
 
 	  interp_method = (orb.NumPoints>6) ? 5 : orb.NumPoints - 2;
@@ -1448,7 +1411,7 @@ int getxyzdot(double *velsat, S1PreciseOrbit  &orb, double t)
 		velsat[0] /= double(10.0);// normalization
 		velsat[1] /= double(10.0);// normalization
 		velsat[2] /= double(10.0);// normalization
-	 
+
 	return 0;
 } // END getxyzdot
 
@@ -1501,7 +1464,7 @@ long lp2xyz(
 	double            CRITERPOS)
 {
 	// TRACE_FUNCTION("lp2xyz (BK 04-Jan-1999)")
-	
+
 	// ______ Convert lp to time ______
 	const double aztime = image.burstFirstLineTime[burstNum] + (line - 1.0) / image.prf;       //image.line2ta(line);
 
@@ -1514,7 +1477,7 @@ long lp2xyz(
 	double velsat[3];
 
 	getxyzdot(&velsat[0], orb, aztime); // const // not, klo,khi
- 
+
 
 	// ______ Set up system of equations and iterate ______
 	//returnpos[0] = 0;  // iteration 0
@@ -1539,7 +1502,7 @@ long lp2xyz(
 
 		//equationset[0] = -eq1_doppler(velsat, dsat_P);
 		equationset[0] = -eq_in(velsat, dsat_P);
- 
+
 
 		//equationset[1] = -eq2_range(dsat_P, ratime);
 		equationset[1] = -1 *(eq_in(dsat_P, dsat_P) - sqr(SOL*rangetime));
@@ -1558,11 +1521,11 @@ long lp2xyz(
 		partialsxyz[6] = (2 * returnpos[0]) / sqr(ell.a);
 		partialsxyz[7] = (2 * returnpos[1]) / sqr(ell.a);
 		partialsxyz[8] = (2 * returnpos[2]) / sqr(ell.b);
-	
+
 
 		// ______ Solve system ______
 		solve33(solxyz, equationset, partialsxyz);
-	 
+
 		// ______Update solution______
 		returnpos[0] += solxyz[0];                         // update approx. value
 		returnpos[1] += solxyz[1];                         // update approx. value
@@ -1574,12 +1537,12 @@ long lp2xyz(
 			abs(solxyz[2]) < CRITERPOS)                        // dz
 			break; // converged
 
-	
+
 	}
 
-	 
+
 	return iter;
-	
+
 	return 0;
 } // END lp2xyz
 
@@ -1596,15 +1559,15 @@ long lp2ell(
 {
 
 	long iter = lp2xyz(line, pixel, ellips, image, orb, burstNum,&returnpos[0], MAXITER, CRITERPOS);
-	 
+
 	return iter;
 } // END lp2ell
 
 
 // end of additional code//
- 
 
- 
+
+
 
 
 bool ComputerBurstOverlap(int InputBurst0, int InputBurstN, int &M_burst0, int &M_burstN,
@@ -1631,14 +1594,14 @@ bool ComputerBurstOverlap(int InputBurst0, int InputBurstN, int &M_burst0, int &
 		M_S1.SubSwath[SubSwathId].slrTimeToFirstPixel) / 2.0;
 	double lat, lon;
 	lat = getLatitude(M_S1, aztime_burst0, rgtime_burst0, SubSwathId);
-	lon = getLontitude(M_S1, aztime_burst0, rgtime_burst0, SubSwathId);
+	lon = getLongitude(M_S1, aztime_burst0, rgtime_burst0, SubSwathId);
 
      double xyz[3];
- 
+
 	 Geodetic2Geographic(ell, deg2rad(lat), deg2rad(lon), 0.0, xyz); //Geo-location points is not precise
-	
+
 	 // use RD model to calculate the XYZ, add by ysli 20190517
-	lp2ell(M_S1.SubSwath[SubSwathId].linesPerBurst / 2, M_S1.SubSwath[SubSwathId].samplesPerBurst/2, 
+	lp2ell(M_S1.SubSwath[SubSwathId].linesPerBurst / 2, M_S1.SubSwath[SubSwathId].samplesPerBurst/2,
 		ell, M_S1.SubSwath[SubSwathId], Burst0, Morbit, &xyz[0]);
 
 
@@ -1691,7 +1654,7 @@ bool ComputerBurstOverlap(int InputBurst0, int InputBurstN, int &M_burst0, int &
 		rgtime_burst0 = (S_S1.SubSwath[SubSwathId].slrTimeToFirstPixel + S_S1.SubSwath[SubSwathId].slrTimeToLastPixel) / 2.0;
 
 		lat = getLatitude(S_S1, aztime_burst0, rgtime_burst0, SubSwathId);
-		lon = getLontitude(S_S1, aztime_burst0, rgtime_burst0, SubSwathId);
+		lon = getLongitude(S_S1, aztime_burst0, rgtime_burst0, SubSwathId);
 
 		double xyz[3];
 
@@ -1739,10 +1702,6 @@ bool ComputerBurstOverlap(int InputBurst0, int InputBurstN, int &M_burst0, int &
 		}
 	}
 
-
-
-
-
 }
 
 
@@ -1755,21 +1714,21 @@ bool CheckSpecificDem(const char *dempath, double lat_min, double lat_max,
 {
 	bool res = 1;
 	GDALAllRegister();
-	//打开数据集
+	//
 	GDALDatasetH hdem1;
 	hdem1 = GDALOpen(dempath, GA_ReadOnly);
 
 	if (hdem1 == NULL)
 	{
 
-		cout << " Unvalid SRTM file " << endl;
-		cout << "It should be the format of Tiff!" << endl;
+		cout << " Invalid SRTM file " << endl;
+		cout << "It should have GeoTiff format!" << endl;
 		GDALClose(hdem1);
 		return 0;
 	}
 
 
-	//获取地理变换
+	//
 	double adfGeoTransform[6];
 	double deltaLat, deltaLon, demlonLeft, demlatUpper, demlonRight, demlatLow;
 	if (GDALGetGeoTransform(hdem1, adfGeoTransform) == CE_None)
@@ -1790,7 +1749,7 @@ bool CheckSpecificDem(const char *dempath, double lat_min, double lat_max,
 
 	if (demlatUpper <= lat_max)
 	{
-		cout << "Scene Outside DEM: most North latitude: " << demlatUpper << "[deg];Scene requires:" << lat_max <<
+		cout << "Scene Outside DEM: most Northern latitude: " << demlatUpper << "[deg];Scene requires:" << lat_max <<
 			"[deg]" << endl;
 
 		res = 0;
@@ -1798,20 +1757,20 @@ bool CheckSpecificDem(const char *dempath, double lat_min, double lat_max,
 
 	if (demlatLow >= lat_min)
 	{
-		cout << "Scene Outside DEM: most South latitude: " << demlatLow << "[deg];Scene requires:" << lat_min <<
+		cout << "Scene Outside DEM: most Southern latitude: " << demlatLow << "[deg];Scene requires:" << lat_min <<
 			"[deg]" << endl;
 		res = 0;
 	}
 
 	if (demlonLeft >= lon_min)
 	{
-		cout << "Scene Outside DEM: most West longtitude: " << demlonLeft << "[deg];Scene requires:" << lon_min <<
+		cout << "Scene Outside DEM: most Western longitude: " << demlonLeft << "[deg];Scene requires:" << lon_min <<
 			"[deg]" << endl;
 		res = 0;
 	}
 	if (demlonRight <= lon_max)
 	{
-		cout << "Scene Outside DEM: most East longtitude: " << demlonRight << "[deg];Scene requires:" << lon_max <<
+		cout << "Scene Outside DEM: most Eastern longitude: " << demlonRight << "[deg];Scene requires:" << lon_max <<
 			"[deg]" << endl;
 		res = 0;
 	}
@@ -2221,7 +2180,7 @@ int GeometricCoreg(SubSwathInfo& M_Swath, SubSwathInfo& S_Swath, S1PreciseOrbit 
 	int BurstPixels = M_Swath.samplesPerBurst;
 	int BurstLines = M_Swath.linesPerBurst;
 
-	//burst index need to be checked 
+	//burst index need to be checked
 	for (int burstId = Mburst0; burstId <= MburstN; burstId++)
 	{
 
@@ -2266,7 +2225,7 @@ int GeometricCoreg(SubSwathInfo& M_Swath, SubSwathInfo& S_Swath, S1PreciseOrbit 
 
 
 
-		
+
 
 		GeoCoreg_warp_cuda(burstId, burstId + BurstGap, xmin, xmax, ymin, ymax, TopoDem.deltaLat,
 			TopoDem.deltaLon, DemLines, DemPixels, TFCoef.getAzCoeff(burstId), TFCoef.getRgCoeff(burstId),
@@ -2286,7 +2245,7 @@ int GeometricCoreg(SubSwathInfo& M_Swath, SubSwathInfo& S_Swath, S1PreciseOrbit 
 			delete[] DemArray;
 			DemArray = NULL;
 		}
-		cout << "Finish the Geometrical Coregistration on burst No." << burstId + 1 << " of SubSwath No."
+		cout << "Finished the Geometrical Coregistration on burst No." << burstId + 1 << " of SubSwath No."
 			<< SwathId << "!" << endl;
 	}
 
@@ -2375,19 +2334,15 @@ int DerampAndResample(SubSwathInfo& M_Swath, SubSwathInfo& S_Swath, TransFormCoe
 		double CpmRg[6];
 		TFCoef.getBurstCoeff(burstId, CpmAz, CpmRg);
 
-
 		SlaveIn.ReadCpxShort(SlaveBox[0], SlaveBox[2], sLines, sPixels, Slave);
-
 
 		DerampDemodResample(Slave, CpmAz, CpmRg, 0.0, ReSlave, ReTable.KernelAz, ReTable.KernelRg, SburstId, sPixels,
 			sLines, MasterBox, SlaveBox, SburstLines, SburstPixels, S_Swath.azimuthTimeInterval, S_Swath.dopplerRate,
 			S_Swath.referenceTime, S_Swath.dopplerCentroid, RePoints);
 
-
-
 		ReSlaveOut.WriteCpxFloat(MasterBox[0], MasterBox[2] - StartLines, mLines, mPixels, ReSlave);
 
-		cout << "Finish the Deramping and Resampling on burst No." << burstId + 1 << " of SubSwath No."
+		cout << "Finished the Deramping and Resampling on burst No." << burstId + 1 << " of SubSwath No."
 			<< SwathId << "!" << endl;
 
 	}
@@ -2513,8 +2468,6 @@ int ESDAndCoh(SubSwathInfo& M_Swath, SubSwathInfo& S_Swath, TransFormCoef& TFCoe
 	int MaximumLines;
 	EstOverlapSize(M_Swath, OverlapSize, Mburst0, MburstN, TotalOverlapLines, MaximumLines);
 
-
-
 	//For Output File
 	TiffWrite ReSlaveESD;
 	TiffWrite CohRes;
@@ -2529,31 +2482,11 @@ int ESDAndCoh(SubSwathInfo& M_Swath, SubSwathInfo& S_Swath, TransFormCoef& TFCoe
 	MasterOverlap.Init(M_Swath.ImgPath.c_str());
 	ReSlaveOverlap.Init(ReSlaveFile);
 
-
-
-
-	//Output Azimuth Coregistration residual
-	
-
-	
-	/*string logfiles = string(ReSlaveESDFile) + ".log";
-	fstream fout;
-	fout.open(logfiles.c_str(), ios::out);
-	if (!fout.is_open())
-	{
-		cout << "output azoffset logfile error !\n";
-		return 1;
-	}*/
 	char buff[100];
 
 	double* BurstShifts = new double[numOverlap];
 
-
-
 	double spectralSep = GetSpectralSep(M_Swath);
-
-
-
 
 	//Read overlap area from master and resampled slave images
 	int samplesPerBurst = M_Swath.samplesPerBurst;
@@ -2569,13 +2502,8 @@ int ESDAndCoh(SubSwathInfo& M_Swath, SubSwathInfo& S_Swath, TransFormCoef& TFCoe
 	MasterOverlap.ReadCpxShort(masterFor, masterBack, numOverlap, OverlapSize, linesPerBurst,
 		0, Mburst0*linesPerBurst, samplesPerBurst);
 
-
-
 	ReSlaveOverlap.ReadCpxFloat(ReslaveFor, ReslaveBack, numOverlap, OverlapSize, linesPerBurst,
 		0, 0, samplesPerBurst);//y0 is alwasy zero.
-
-
-
 
 	//Estimate ESD shifts
 	int coh_rg = 24;
@@ -2588,28 +2516,28 @@ int ESDAndCoh(SubSwathInfo& M_Swath, SubSwathInfo& S_Swath, TransFormCoef& TFCoe
 
 	if (masterFor)
 	{
-		delete[]masterFor;
+		delete[] masterFor;
 		masterFor = NULL;
 	}
 	if (masterBack)
 	{
-		delete[]masterBack;
+		delete[] masterBack;
 		masterBack = NULL;
 	}
 	if (ReslaveFor)
 	{
-		delete[]ReslaveFor;
+		delete[] ReslaveFor;
 		ReslaveFor = NULL;
 	}
 	if (ReslaveBack)
 	{
-		delete[]ReslaveBack;
+		delete[] ReslaveBack;
 		ReslaveBack = NULL;
 	}
 
 	for (int k = 0; k < numOverlap; k++)
 	{
-		cout << "Shift Residual:" << BurstShifts[k];
+		cout << "Shift Residual: " << BurstShifts[k];
 		if (fabs(BurstShifts[k])>100)
 		{
 			cout << "----Invalid Value, will be reset as zero!";
@@ -2620,10 +2548,6 @@ int ESDAndCoh(SubSwathInfo& M_Swath, SubSwathInfo& S_Swath, TransFormCoef& TFCoe
 
 
 	//remove the invalid shifts.
-
-
-
-
 
 	//1.Resample the slave image using the refined shifts
 	//2.Estimate Coherence
@@ -2643,7 +2567,7 @@ int ESDAndCoh(SubSwathInfo& M_Swath, SubSwathInfo& S_Swath, TransFormCoef& TFCoe
 	int startLines = Mburst0*linesPerBurst;
 	for (int b = Mburst0; b <= MburstN; b++)
 	{
-		printf("Progress Info :  burst %d  \n", b + 1 );
+		printf("Progress Info:  burst %d  \n", b + 1 );
 
 		int y0 = b*linesPerBurst;
 
@@ -2715,7 +2639,7 @@ int ESDAndCoh(SubSwathInfo& M_Swath, SubSwathInfo& S_Swath, TransFormCoef& TFCoe
 			CoherenceEst(0, y0, samplesPerBurst, linesPerBurst, dx, dy, coh_rg, coh_az, MasterIn,
 				d_ReSlave, Coh);
 
-			
+
 
 			//Output Coherence image
 			CohRes.WriteFloat(MasterBox[0], MasterBox[2] - startLines, linesPerBurst, samplesPerBurst, Coh);
@@ -2767,7 +2691,7 @@ void EstOverlapSize(SubSwathInfo& M_Swath, int* OverlapSize, int Mburst0, int Mb
 	double dt = M_Swath.azimuthTimeInterval;
 	if (OverlapSize == NULL)
 	{
-		cout << "The pointer has not been initialiazed! Please Intialize it!" << endl;
+		cout << "The pointer has not been initialized! Please Initialize it!" << endl;
 		system("pause");
 		exit(0);
 	}
@@ -2811,8 +2735,7 @@ bool CheckDir(string Dir)
 	if (0 != access(Dir.c_str(), 0))
 	{
 		// if this folder not exist, create a new one.
-		if (mkdir(Dir.c_str()) != 0)return false;
-		//换成 ::_mkdir  ::_access 也行，不知道什么意思
+		if (mkdir(Dir.c_str(), 0777) != 0) return false;
 	}
 
 	return true;

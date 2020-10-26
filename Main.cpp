@@ -1,27 +1,27 @@
-#include <iostream>
-#include<stdio.h>
-#include<fstream>
-#include "DataTypes.h"
-#include "cuComplex.h"
 #include "Func.h"
-
-
 
 int main()
 {
-	
+	cout << "Starting SLC processing" << endl;
+
 	ConfigSet S1Config;
 	string ConfigPath="config.txt";
 	if (!ReadInput(S1Config, ConfigPath.c_str()))
 	{
-		cout << "Failed in Openning Config File!" << endl;
+		cout << "Failed in Opening Config File!" << endl;
 		system("pause");
 		return 1;
 	}
-		
+
 	CheckDir(S1Config.process_dir);
 
-	cout << "Current Working Catalogue:" << S1Config.process_dir << endl;
+	cout << "Current Working Catalogue: " << S1Config.process_dir << endl;
+	cout << "Path to Master: " << S1Config.masterpath << endl;
+	cout << "Path to Slave: " << S1Config.slavepath << endl;
+	cout << "Path to Master orbits: " << S1Config.preciseOrbitMaster << endl;
+	cout << "Path to Slave orbits: " << S1Config.preciseOrbitSlave << endl;
+	cout << "Path to DEM: " << S1Config.SpecificDemPath << endl;
+	cout << "Polarization: " << S1Config.polarisation << endl;
 
 
 	SentinelTOPS M_S1;
@@ -30,17 +30,18 @@ int main()
 	S1_Initialize(M_S1, S1Config.masterpath.c_str(), S1Config.polarisation);
 	S1_Initialize(S_S1, S1Config.slavepath.c_str(), S1Config.polarisation);
 
+	cout << "Parameter Initialization done" << endl;
+
 	S1PreciseOrbit Morbit;
 	S1PreciseOrbit Sorbit;
 
-
-
-	//Reading Precise Orbit Info 
+	//Reading Precise Orbit Info
 	S1_OrbitInitialize(Morbit, S1Config.preciseOrbitMaster.c_str(), M_S1.SubSwath[0].firstLineUTC.c_str(),
 		M_S1.SubSwath[0].lastLineUTC.c_str(),M_S1.MissionID);
 	S1_OrbitInitialize(Sorbit, S1Config.preciseOrbitSlave.c_str(), S_S1.SubSwath[0].firstLineUTC.c_str(),
 		S_S1.SubSwath[0].lastLineUTC.c_str(),S_S1.MissionID);
 
+	cout << "Orbit Initialization done" << endl;
 
 
 	if (!CheckSpecificDem(S1Config.SpecificDemPath.c_str(), M_S1.lat_min, M_S1.lat_max,
@@ -50,6 +51,8 @@ int main()
 		system("pause");
 		exit(0);
 	}
+
+	cout << "DEM Checks done" << endl;
 
 	/********************************************************************/
 	//Estimate the polynomials based on the orbit information
@@ -72,21 +75,20 @@ int main()
 	TopoDEM.Init(S1Config.SpecificDemPath.c_str());
 
 	ResampleTable S1ReTable;
-	InKernelInit(S1ReTable, 12, M_S1.getPRF(), M_S1.getABW(),
-		M_S1.getRSR2X());
+	InKernelInit(S1ReTable, 12, M_S1.getPRF(), M_S1.getABW(), M_S1.getRSR2X());
 
 	TransFormCoef TransC;
 	char buff[5];
 	/********************************************************************/
-	/*InSAR processing for S1 TOPS data. Coregistration, resampling, ESD, 
+	/*InSAR processing for S1 TOPS data. Coregistration, resampling, ESD,
 	Coherence Estimation modules are serially performed.*/
 	/********************************************************************/
 	for (int NSubS = S1Config.firstsubswath; NSubS <= S1Config.lastsubswath; NSubS++)
 	{
 		sprintf(buff, "-%01d", NSubS);
-		string ReSlaveFile = S1Config.process_dir + "\\ReSlave" + string(buff) + ".tif";
-		string ReSlaveESDFile = S1Config.process_dir + "\\ReSlaveESD" + string(buff) + ".tif";
-		string CohFile = S1Config.process_dir + "\\Coh" + string(buff) + ".tif";
+		string ReSlaveFile = S1Config.process_dir + "/ReSlave" + string(buff) + ".tif";
+		string ReSlaveESDFile = S1Config.process_dir + "/ReSlaveESD" + string(buff) + ".tif";
+		string CohFile = S1Config.process_dir + "/Coh" + string(buff) + ".tif";
 
 		/********************************************************************/
 		/*Check and estimate the burst overlap between Master and Slave*/
@@ -96,8 +98,7 @@ int main()
 
 		ComputerBurstOverlap(S1Config.burst0, S1Config.burstN, M_burst0, M_burstN,
 			S_burst0, S_burstN, M_S1, S_S1, NSubS, Morbit, Sorbit);
-		
-		
+
 		TransC.Init(M_burst0 , M_burstN );
 
 		printf("Start geometric coregistration on subswath %d \n", NSubS);
@@ -141,57 +142,3 @@ int main()
 
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
- 

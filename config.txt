@@ -1,12 +1,11 @@
-process_dir= Current Working Directory
-masterpath=The Path to  Master Image
-slavepath=The Path to Slave Image
-preciseOrbitMaster=The Path to the Master Precise Orbit File
-preciseOrbitSlave=The Path to the Master Precise Orbit File
-SpecificDemPath=The Path to DEM File (Tiff format only)
-firstsubswath=The Start Proccesing Subswath
-burst0=The start burst
-burstN=The stop burst
-lastsubswath=The End Proccesing Subswath
-polarisation= Specific polarisation types
-
+process_dir=/data1/insar/testset/output2
+masterpath=/data1/insar/testset/SLC/S1A_IW_SLC__1SDV_20200908T053530_20200908T053557_034263_03FB5F_EB23.SAFE
+slavepath=/data1/insar/testset/SLC/S1A_IW_SLC__1SDV_20200920T053531_20200920T053558_034438_04019B_C8D9.SAFE
+preciseOrbitMaster=/data1/insar/testset/auxdata/Orbits/Sentinel-1/POEORB/S1A/2020/09/S1A_OPER_AUX_POEORB_OPOD_20200928T121425_V20200907T225942_20200909T005942.EOF
+preciseOrbitSlave=/data1/insar/testset/auxdata/Orbits/Sentinel-1/POEORB/S1A/2020/09/S1A_OPER_AUX_POEORB_OPOD_20201010T121243_V20200919T225942_20200921T005942.EOF
+SpecificDemPath=/data1/insar/testset/auxdata/dem/SRTM_1sec/dem.tif
+firstsubswath=1
+lastsubswath=1
+burst0=1
+burstN=2
+polarisation=vv

@@ -115,7 +115,7 @@ public:
 	double *incidenceAngle;
 
 	bool nearRangeOnLeft;
-	
+
 
 	LatLonMaxMin latlon;
 	LatLonMaxMin *latlonBurst;
@@ -208,8 +208,8 @@ class RefDem
 	double deltaLat;
 	double deltaLon;
 	double lon_min;
-	double lat_max; 
-	double lat_min; 
+	double lat_max;
+	double lat_min;
 	double lon_max;
 	int Lines;
 	int Pixels;
@@ -223,7 +223,7 @@ class RefDem
 	void getData(double lat_min, double lat_max, double lon_min, double lon_max, double extralat,
 		double extralon, int*&demBuffer, int& Lines, int& Pixels);
 	void getIndex(double lat, double lon, double Res[2]);
-	
+
 };
 
 //6 parameters to describe the translation relationship between master and slave
@@ -241,8 +241,8 @@ public:
 	double* getAzCoeff(int BurstId);
 	double* getRgCoeff(int BurstId);
 	void clear();
-	
-	
+
+
 };
 /*************************************************************
 *                     Class: TiffRead                       *

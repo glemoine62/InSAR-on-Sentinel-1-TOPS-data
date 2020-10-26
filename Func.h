@@ -1,11 +1,15 @@
 #ifndef FUNC_H
 #define FUNC_H
 #include "DataTypes.h"
-#include "io.h"
 #include "tinyxml2.h"
 #include "Constants.h"
 #include "cuComplex.h"
 #include <ctime>
+
+// POSIX
+#include <sys/types.h>
+#include <dirent.h>
+
 
 using namespace tinyxml2;
 
@@ -13,7 +17,8 @@ using namespace tinyxml2;
 bool ReadInput(ConfigSet & ConfigInput, const char* ConfigPath);
 bool CheckDir(string Dir);
 //Check Image and Xml files
-int GetFiles(string path, string * files, string polar);
+int GetFiles(const string& path, string * files, string polar);
+int GetSortedFiles(const string& path, string * files, string polar);
 //Initialize S1 product
 bool S1_Initialize(SentinelTOPS& S1, const char* Path, string polar);
 
@@ -22,7 +27,7 @@ double utc2seconds(const char* utc);
 void getIntArray(string str, char gap, int *Array);
 void getDoubleArray(string str, char gap, double *Array);
 int DiffUTCTime(string firstUTC, string lastUTC);
-bool CheckOribtFile(string PreciseOrbit, string UTCtime, string MissionID);
+bool CheckOrbitFile(string PreciseOrbit, string UTCtime, string MissionID);
 bool S1_OrbitInitialize(S1PreciseOrbit &Orbit,
 	const  char * Path, const char *firstUTC, const char *lastUTC, string MissionID);
 
@@ -30,10 +35,10 @@ bool S1_OrbitInitialize(S1PreciseOrbit &Orbit,
 void matTxmat(double *A, double *B, double *Res,
 	int ALines, int ResLines, int ResPixels);
 
-// Cholesky factorization 
+// Cholesky factorization
 void choles(double * A, int N);
 
-//Solving  Cholesky factorization 
+//Solving  Cholesky factorization
 void solvechol(
 	double *A, double* B, int ALines, int APixels, int BLines, int BPixels);
 
@@ -43,7 +48,7 @@ void invertchol(
 bool Polyfit_Orbit(S1PreciseOrbit &Orbit);
 
 double getLatitude(SentinelTOPS& S1, double aztime, double rgtime, int SubSwathID);
-double getLontitude(SentinelTOPS& S1, double aztime, double rgtime, int SubSwathID);
+double getLongitude(SentinelTOPS& S1, double aztime, double rgtime, int SubSwathID);
 void Locating(SentinelTOPS& S1, double aztime, double rgtime, int SubSwathID,
 	int*Index, double * coef);
 void Geodetic2Geographic(ellipsoid_WGS84 &ell, double lat, double lon, double height,

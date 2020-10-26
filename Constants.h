@@ -7,8 +7,9 @@ static char eachLine[4 * 258];//For reading a line
 #define SOL 299792458.0
 #define PI 3.1415926535897931e+0
 #define Interval 2047
-#define max(a,b)  ((a)>(b)?(a):(b))
-#define min(a,b)  ((a)<(b)?(a):(b))
+// macros cause conflict with std
+//#define max(a,b)  ((a)>(b)?(a):(b))
+//#define min(a,b)  ((a)<(b)?(a):(b))
 #define demNoData -32768.0
 
 inline double sqr(const double &x) { return(x*x); }

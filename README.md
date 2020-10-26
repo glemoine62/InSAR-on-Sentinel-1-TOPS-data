@@ -1,81 +1,128 @@
-# InSAR-on-Sentinel-1-TOPS-data
-This code is developed under Visual Studio 2013 and CUDA toolkit 8.0.
-The software makes use of Graphic Processing Unit to perform Geometric coregistration, resampling, ESD and Coherence Estimation on Sentinel-1 TOPS data.
+# Main steps to convert to linux
 
-This software dependents on two libraries:
+This repository contains POSIX compliant C++ code to run [Yanghai Yu's CUDA code for
+InSAR processing of Sentinel-1 SLC data](https://github.com/a787854/InSAR-on-Sentinel-1-TOPS-data)
 
-1.TinyXml2:
+To understand what the code does, make sure to read the excellent paper:
 
-Please find it at:https://github.com/leethomason/tinyxml2
+[GPU accelerated interferometric SAR processing for Sentinel-1 TOPS data" (2019), Computers and Geosciences](https://doi.org/10.1016/j.cageo.2019.04.010).
 
-2.GDAL.
+Only minimum changes have been made to the original C++ code (documented below)
+and primarily related to different file reading of metadata, which is different
+for Windows based C++ (which is not POSIX compliant).
 
+The main benefit of the converted code is that it can run on linux.
 
-Platform:
+No changes were made to the CUDA code. The CUDA modules need to be collected
+from the github site listed above.
 
-It is suggested to use the GPUs with powerful double floating computing (compute capability>=3.0).
-Otherwise, the accuracy of coregistration is not guaranteed. 
-To achieve a better performance, the driver mode of GPU should be set as TCC mode. 
+## Test Configuration
 
+Tested on a HP Pavilion laptop with:
+- Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz x8
+- 16 GB RAM
+- GeForce MX250 with 2GB onboard RAM (384 cores)
+- Ubuntu 18.04.5 LTS
 
-Our testing platform:
-GPU: Nvidia GTX Titan black  CPU:Intel I7-6700K
+The GeForce MX250 is CUDA compute 6.0 compatible.
 
+The code processes a Sentinel-1 SLC pair to full resolution coherence for a selection
+of subswaths and bursts. The full scene (3 subswaths with 9 bursts each) are processed
+in about 7 minutes on the test configuration above. That's **impressive** if compared
+to the [ESA SNAP Sentinel-1 toolbox](https://github.com/senbox-org/s1tbx) based coherence processing.
 
-Config File:
-
-process_dir= Current Working Directory
-
-masterpath=The Path to the Master Image
-
-slavepath=The Path to the Slave Image
-
-preciseOrbitMaster=The Path to the Master Precise Orbit File
-
-preciseOrbitSlave=The Path to the Slave Precise Orbit File
-
-SpecificDemPath=The Path to DEM File (Tiff format only)
-
-burst0=The Start Burst
-
-burstN=The Stop Burst
-
-firstsubswath=The Start Proccesing Subswath
-
-lastsubswath=The End Proccesing Subswath
-
-polarisation=Specific polarisation types
-
-Research Paper:
-"GPU accelerated interferometric SAR processing for Sentinel-1 TOPS data" (2019), Computers and Geosciences, Doi: https://doi.org/10.1016/j.cageo.2019.04.010.
+However, several steps are not yet included, in particular debursting and subswath merging and,
+more importantly, terrain correction. Thus, a full performance comparison is not yet possible.
 
 
+## Requirements:
+
+### Install tinyxmls2 and gdal dependencies:
+
+sudo apt-get install libtinyxml2-6 libtinyxml2-dev
+sudo apt-get install libgdal20 libgdal-dev
 
 
-How to compile this file:
+### Install CUDA toolkit:
 
-Regarding my environment, I used the VS2017 as the IDE and CUDA 10.1 as the GPU toolkit to compile the all codes (VS2013 and CUDA 8.0 also works). 
+Provides the nvcc compiler, relevant numerical libraries and the required header
+cuComplex.h
 
-Here are the steps which should be noted in compilation:
+sudo apt install nvidia-cuda-toolkit
 
-1. Create a new empty win console application project (without pre-compiled header).
+## Compile and run
 
-2. add all the source code files and two additional files tinyxml2.cpp and tinyxml2.h (from library TinyXml2)
+Make sure to have recent g++ and nvcc compilers installed. The test box uses g++ 7.5.0
+and nvcc 9.1.
 
-3. Link the CUDA toolkit to the project: right click the project-> build customization->click CUDA toolkit.
+Check whether code header include and linked library directories are set correctly
+for compiling and linking (if not, this will throw errors that are usually self-evident)
 
-4. Specify all the .cu files as the CUDA C/C++ files, so these files can be included into the compilation.
+A Makefile is included.
 
-5. Set the include directories (include TinyXml2 and GDAL libraries), and lib directories (include GDAL libs).
+Check your GPU compute compatibility and change the -arch=sm_NN CUDAFLAG accordingly.
+(NN must be >= 30).
 
-6. link to the GDAL libraries and also to CUDA libraries (cudart.lib; cusolver.lib; cublas.lib).
+Compile with:
 
-7. Project -> Properties -> Configuration Properties -> CUDA C/C++ -> Device -> Code Generation -> compute_35, sm_35 (higher than 35, and choose an appropriate option according to your card’s compute capability);
+make all
 
-8. Note : "This function or variable may be unsafe. Consider using sprintf_s instead", please include this two lines in the Pre-processor Definitions : _CRT_SECURE_NO_WARNINGS , _CRT_NONSTDC_NO_DEPRECATE.
+Run with:
 
-If you meet some specific problems, please contact me!
+./gpuSNAP
 
-Contact:
-filippoyu0717@gmail.com
+**NOTE**: I need to exit X windows (Ctrl-Alt-F1) as GPU computing conflicts (likely due to memory).
+When using a GeForce GPU, you cannot switch to TCC mode (on linux).
+Just login normally, and run everything from the command line. VI or burst!
 
+## Code changes (C++ only):
+
+All CRLF converted to LF (inherited from Windoze). Essential for input files, e.g.
+config.txt. If config file is not converted, string concatenation (e.g. in GetFiles)
+goes wrong (appending at start of string due to CR).
+
+An example config.txt is provided.
+
+In Func.h removed:
+
+```
+#include "io.h"
+```
+
+and added:
+
+```
+// POSIX
+#include <sys/types.h>
+#include <dirent.h>
+```
+
+In Main.cpp only Func.h needs to be included.
+
+Directory scanning GetFiles in Func.cpp needs to be rewritten to POSIX C++ 11.
+
+Undocumented, but essential, is that ImgFiles and XmlFiles must be found in the
+same naming order, so a scandir() is required. Implemented as GetSortedFiles.
+
+typos:
+Func.h|cpp:
+
+CheckOribtFile -> CheckOrbitFile
+getLontitude -> getLongitude
+
+(several misspelled error messages corrected)
+
+In Func.cpp CheckOrbitFile, monthDays removed. Is never used, and was not correct
+for leap years. MissionID mismatch is now a warning only, in order to allow S1A
+and S1B combinations.
+
+config.txt parsing in ReadInput allows for parameters multi_az and multi_rg to be
+defined as integers (Undocumented). Not used for now.
+
+Various print statements added to help in debugging.
+
+## TODO
+
+- Run on a cloud instance with a chunky GPU (e.g. AWS p3 with NVIDIA V100 GPU);
+- Change use of cout << "bla bla" << endl to printf;
+- DEM can probably be anything GDAL compliant, not only GeoTIFF. Would be useful to pass in simple VRT compositions of SRTM tiles.

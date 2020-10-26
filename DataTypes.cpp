@@ -202,7 +202,7 @@ void RefDem::Init(const char* DEMPath)
 		system("pause");
 		exit(0);
 	}
-	//»ñÈ¡DEMµØÀí×ø±êÐÅÏ¢
+	//ï¿½ï¿½È¡DEMï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	double adfGeoTransform[6];
 	if (GDALGetGeoTransform(pData_dem, adfGeoTransform) == CE_None)
 	{
@@ -255,7 +255,7 @@ void RefDem::getData(double lat_min, double lat_max, double lon_min, double lon_
 	GDALRasterBandH hBand_dem;
 	hBand_dem = GDALGetRasterBand(pData_dem, 1);
 	GDALRasterIO(hBand_dem, GF_Read, UpperLeft[1], UpperLeft[0], Pixels, Lines, demBuffer, Pixels, Lines, GDT_Int16, 0, 0);
-	
+
 }
 
 void RefDem::getData(double lat_min, double lat_max, double lon_min, double lon_max, double extralat,
@@ -285,7 +285,7 @@ void RefDem::getData(double lat_min, double lat_max, double lon_min, double lon_
 	GDALRasterBandH hBand_dem;
 	hBand_dem = GDALGetRasterBand(pData_dem, 1);
 	GDALRasterIO(hBand_dem, GF_Read, UpperLeft[1], UpperLeft[0], Pixels, Lines, TmpDem, Pixels, Lines, GDT_Int16, 0, 0);
-	
+
 	for (int i = 0; i < Lines*Pixels; i++)
 	{
 		demBuffer[i] = TmpDem[i];
@@ -297,7 +297,7 @@ void RefDem::getIndex(double lat, double lon, double Res[2])
 {
 	Res[0] = (lat_max - lat) / deltaLat;
 	Res[1] = (lon - lon_min) / deltaLon;
-	
+
 }
 /*****************************************************************/
 
@@ -320,7 +320,7 @@ void TransFormCoef::getBurstCoeff(int BurstId, double CoeffAz[6], double CoeffRg
 
 		CoeffAz[i] = CpmAz[burstPos * 6 + i];
 		CoeffRg[i] = CpmRg[burstPos * 6 + i];
-		
+
 	}
 
 
@@ -354,7 +354,7 @@ void TransFormCoef::Init(int BurstBeign, int BurstEnd)
 		cout << "The coefficients arrays have been Initialized!" << endl;
 		return;
 	}
-	
+
 	int NumB = BurstEnd - BurstBeign + 1;
 	burst0 = BurstBeign;
 	Nbust = NumB;
@@ -461,15 +461,15 @@ void TiffRead::ReadCpxShort(complex<short>*dataFor, complex<short>*dataBack,
 		int OffsetPerOverlapBack = y0 + (i + 1)*linesPerBurst;
 
 
-	
+
 
 		GDALRasterIO(hBand, GF_Read, x0, OffsetPerOverlapFor,
 			width, overlapsize, &dataFor[arrayOffset*width], width, overlapsize, GDT_CInt16, 0, 0);
-		
+
 
 		GDALRasterIO(hBand, GF_Read, x0, OffsetPerOverlapBack, width, overlapsize
 			, &dataBack[arrayOffset*width], width, overlapsize, GDT_CInt16, 0, 0);
-		
+
 		arrayOffset += overlapsize;
 
 	}
@@ -611,7 +611,7 @@ void TiffWrite::WriteFloat(int x0, int y0, int Lines, int Pixels, float *Buffer)
 
 
 	GDALRasterIO(hBand, GF_Write, x0, y0, Pixels, Lines, Buffer, Pixels, Lines, GDT_Float32, 0, 0);
-	
+
 }
 void TiffWrite::WriteDouble(int x0, int y0, int Lines, int Pixels, double *Buffer)
 {

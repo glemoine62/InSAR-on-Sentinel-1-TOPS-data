@@ -28,12 +28,17 @@ The GeForce MX250 is CUDA compute 6.0 compatible.
 
 The code processes a Sentinel-1 SLC pair to full resolution coherence for a selection
 of subswaths and bursts. The full scene (3 subswaths with 9 bursts each) are processed
-in about 7 minutes on the test configuration above. That's **impressive** if compared
-to the [ESA SNAP Sentinel-1 toolbox](https://github.com/senbox-org/s1tbx) based coherence processing.
+in about 3 minutes on the test configuration above. That's **impressive** if compared
+to the [ESA SNAP Sentinel-1 toolbox](https://github.com/senbox-org/s1tbx) based
+coherence processing.
+
+In fact, it is so fast that the process is no longer compute constrained, but rather
+limited by I/O throughput. The 3 minutes performance is when data read/write is
+from/to an SSD. The same run takes 7 minutes is the data read/write is from/to HDD.
+About 16 GB input is read and 20 GB of output is created.
 
 However, several steps are not yet included, in particular debursting and subswath merging and,
 more importantly, terrain correction. Thus, a full performance comparison is not yet possible.
-
 
 ## Requirements:
 

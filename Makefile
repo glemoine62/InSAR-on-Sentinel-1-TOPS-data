@@ -10,4 +10,4 @@ INCDIRS=-I/usr/include
 all: *.o
 	$(CC) -o gpuSNAP Main.cpp Func.cpp DataTypes.cpp *.o $(LIBDIRS) $(INCDIRS) $(LIBS) $(CXXFLAGS)
 clean:
-	rm -rf gpuSnap *.o
+	rm -rf gpuSNAP *.o

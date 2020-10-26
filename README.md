@@ -1,7 +1,8 @@
 # Main steps to convert to linux
 
-This repository contains POSIX compliant C++ code to run [Yanghai Yu's CUDA code for
+This repository is a fork of [Yanghai Yu's CUDA code for
 InSAR processing of Sentinel-1 SLC data](https://github.com/a787854/InSAR-on-Sentinel-1-TOPS-data)
+and contains the POSIX compliant C++ code to run on linux (the original code is for Windows Visual Studio C++).
 
 To understand what the code does, make sure to read the excellent paper:
 
@@ -11,10 +12,9 @@ Only minimum changes have been made to the original C++ code (documented below)
 and primarily related to different file reading of metadata, which is different
 for Windows based C++ (which is not POSIX compliant).
 
-The main benefit of the converted code is that it can run on linux.
+The main benefit of the converted code is that **it can run on linux**.
 
-No changes were made to the CUDA code. The CUDA modules need to be collected
-from the github site listed above.
+No changes were made to the CUDA code (\*.cu code fragments).
 
 ## Test Configuration
 
@@ -38,17 +38,19 @@ more importantly, terrain correction. Thus, a full performance comparison is not
 ## Requirements:
 
 ### Install tinyxmls2 and gdal dependencies:
-
+```
 sudo apt-get install libtinyxml2-6 libtinyxml2-dev
 sudo apt-get install libgdal20 libgdal-dev
-
+```
 
 ### Install CUDA toolkit:
 
 Provides the nvcc compiler, relevant numerical libraries and the required header
 cuComplex.h
 
+```
 sudo apt install nvidia-cuda-toolkit
+```
 
 ## Compile and run
 
@@ -65,15 +67,18 @@ Check your GPU compute compatibility and change the -arch=sm_NN CUDAFLAG accordi
 
 Compile with:
 
+```
 make all
-
+```
 Run with:
 
+```
 ./gpuSNAP
+```
 
-**NOTE**: I need to exit X windows (Ctrl-Alt-F1) as GPU computing conflicts (likely due to memory).
+**NOTE**: I need to exit X windows (Ctrl-Alt-F1) due to GPU computing conflicts (likely memory related).
 When using a GeForce GPU, you cannot switch to TCC mode (on linux).
-Just login normally, and run everything from the command line. VI or burst!
+Just login normally, and run everything from the command line.
 
 ## Code changes (C++ only):
 
@@ -97,18 +102,19 @@ and added:
 #include <dirent.h>
 ```
 
-In Main.cpp only Func.h needs to be included.
+In Main.cpp only Func.h needs to be included (removed other includes).
 
 Directory scanning GetFiles in Func.cpp needs to be rewritten to POSIX C++ 11.
 
 Undocumented, but essential, is that ImgFiles and XmlFiles must be found in the
 same naming order, so a scandir() is required. Implemented as GetSortedFiles.
 
-typos:
-Func.h|cpp:
+Typos corrected in Func.h|cpp:
 
+```
 CheckOribtFile -> CheckOrbitFile
 getLontitude -> getLongitude
+```
 
 (several misspelled error messages corrected)
 
@@ -117,7 +123,7 @@ for leap years. MissionID mismatch is now a warning only, in order to allow S1A
 and S1B combinations.
 
 config.txt parsing in ReadInput allows for parameters multi_az and multi_rg to be
-defined as integers (Undocumented). Not used for now.
+defined as integers (undocumented). Not used for now.
 
 Various print statements added to help in debugging.
 

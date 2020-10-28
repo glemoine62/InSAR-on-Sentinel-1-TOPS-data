@@ -38,6 +38,14 @@ The code processes a Sentinel-1 SLC pair to full resolution coherence for a sele
 of subswaths and bursts. However, several steps are not yet included, in particular  
 debursting and subswath merging and, more importantly, terrain correction.
 
+The pseudo-colored coherence output for subswath is shown below. This is for the
+S1A pair in [the test configuration file](config.txt), which is a descending
+scene over Northern Italy. Lake Maggiore is in the left half of the scene
+(east-west is mirrored, because Sentinel-1 is right looking). Note that the burst
+boundaries are still visible.
+
+![S1A coherence subswath 2](S1_20200908_20200920_Coh_sub2.png "S1A  coherence subswath 2")
+
 The full scene (3 subswaths with 9 bursts each) are processed
 in about [3 minutes on the laptop configuration](mx250_run.log) above.
 
@@ -80,7 +88,7 @@ and nvcc 9.1.
 Check whether code header include and linked library directories are set correctly
 for compiling and linking (if not, this will throw errors that are usually self-evident)
 
-A Makefile is included.
+A [Makefile](Makefile) is included.
 
 Check your GPU compute compatibility and change the -arch=sm_NN CUDAFLAG accordingly.
 (NN must be >= 30).
@@ -96,7 +104,7 @@ Run with:
 ./gpuSNAP
 ```
 
-**NOTE**: I need to exit X windows on my mx250 laptop (Ctrl-Alt-F1 or sudo init 3) due to GPU 
+**NOTE**: I need to exit X windows on my mx250 laptop (Ctrl-Alt-F1 or sudo init 3) due to GPU
 computing conflicts (likely memory related). When using a GeForce GPU, you cannot
 switch to TCC mode (on linux). Just login normally, and run everything from the command line.
 
@@ -106,7 +114,7 @@ All CRLF converted to LF (inherited from Windoze). Essential for input files, e.
 config.txt. If config file is not converted, string concatenation (e.g. in GetFiles)
 goes wrong (appending at start of string due to CR).
 
-An example config.txt is provided.
+An example [configuration file](config.txt) is provided.
 
 In Func.h removed:
 

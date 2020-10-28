@@ -45,7 +45,7 @@ boundaries are still visible.
 
 ![S1A coherence subswath 2](S1A_20200908_20200920_Coh_sub2.png "S1A  coherence subswath 2")
 
-The full scene (3 subswaths with 9 bursts each) are processed
+The full scene (3 subswaths with 9 bursts each) is processed
 in about [3 minutes on the laptop configuration](mx250_run.log) above.
 
 That's **impressive** if compared

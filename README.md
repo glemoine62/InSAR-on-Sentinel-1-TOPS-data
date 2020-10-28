@@ -44,7 +44,7 @@ scene over Northern Italy. Lake Maggiore is in the left half of the scene
 (east-west is mirrored, because Sentinel-1 is right looking). Note that the burst
 boundaries are still visible.
 
-![S1A coherence subswath 2](S1_20200908_20200920_Coh_sub2.png "S1A  coherence subswath 2")
+![S1A coherence subswath 2](S1A_20200908_20200920_Coh_sub2.png "S1A  coherence subswath 2")
 
 The full scene (3 subswaths with 9 bursts each) are processed
 in about [3 minutes on the laptop configuration](mx250_run.log) above.

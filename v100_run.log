@@ -1,0 +1,279 @@
+Starting SLC processing
+/home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200908T053530_20200908T053557_034263_03FB5F_EB23.SAFE
+Current Working Catalogue: /home/ubuntu/insar/testset/output
+Path to Master: /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200908T053530_20200908T053557_034263_03FB5F_EB23.SAFE
+Path to Slave: /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200920T053531_20200920T053558_034438_04019B_C8D9.SAFE
+Path to Master orbits: /home/ubuntu/insar/testset/auxdata/Orbits/Sentinel-1/POEORB/S1A/2020/09/S1A_OPER_AUX_POEORB_OPOD_20200928T121425_V20200907T225942_20200909T005942.EOF
+Path to Slave orbits: /home/ubuntu/insar/testset/auxdata/Orbits/Sentinel-1/POEORB/S1A/2020/09/S1A_OPER_AUX_POEORB_OPOD_20201010T121243_V20200919T225942_20200921T005942.EOF
+Path to DEM: /home/ubuntu/insar/testset/auxdata/dem/SRTM_1sec/dem.tif
+Polarization: vv
+In S1_Initialize
+Using /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200908T053530_20200908T053557_034263_03FB5F_EB23.SAFE
+In GetSortedFiles
+Using /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200908T053530_20200908T053557_034263_03FB5F_EB23.SAFE/measurement
+SubSwath found for /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200908T053530_20200908T053557_034263_03FB5F_EB23.SAFE/measurement
+0: /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200908T053530_20200908T053557_034263_03FB5F_EB23.SAFE/measurement/s1a-iw1-slc-vv-20200908t053532-20200908t053557-034263-03fb5f-004.tiff
+1: /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200908T053530_20200908T053557_034263_03FB5F_EB23.SAFE/measurement/s1a-iw2-slc-vv-20200908t053530-20200908t053556-034263-03fb5f-005.tiff
+2: /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200908T053530_20200908T053557_034263_03FB5F_EB23.SAFE/measurement/s1a-iw3-slc-vv-20200908t053531-20200908t053557-034263-03fb5f-006.tiff
+In GetSortedFiles
+Using /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200908T053530_20200908T053557_034263_03FB5F_EB23.SAFE/annotation
+Annotations found for /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200908T053530_20200908T053557_034263_03FB5F_EB23.SAFE/annotation
+0: /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200908T053530_20200908T053557_034263_03FB5F_EB23.SAFE/annotation/s1a-iw1-slc-vv-20200908t053532-20200908t053557-034263-03fb5f-004.xml
+1: /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200908T053530_20200908T053557_034263_03FB5F_EB23.SAFE/annotation/s1a-iw2-slc-vv-20200908t053530-20200908t053556-034263-03fb5f-005.xml
+2: /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200908T053530_20200908T053557_034263_03FB5F_EB23.SAFE/annotation/s1a-iw3-slc-vv-20200908t053531-20200908t053557-034263-03fb5f-006.xml
+Start XML Parsing
+Done XML Parsing
+In S1_Initialize
+Using /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200920T053531_20200920T053558_034438_04019B_C8D9.SAFE
+In GetSortedFiles
+Using /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200920T053531_20200920T053558_034438_04019B_C8D9.SAFE/measurement
+SubSwath found for /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200920T053531_20200920T053558_034438_04019B_C8D9.SAFE/measurement
+0: /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200920T053531_20200920T053558_034438_04019B_C8D9.SAFE/measurement/s1a-iw1-slc-vv-20200920t053533-20200920t053558-034438-04019b-004.tiff
+1: /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200920T053531_20200920T053558_034438_04019B_C8D9.SAFE/measurement/s1a-iw2-slc-vv-20200920t053531-20200920t053556-034438-04019b-005.tiff
+2: /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200920T053531_20200920T053558_034438_04019B_C8D9.SAFE/measurement/s1a-iw3-slc-vv-20200920t053532-20200920t053557-034438-04019b-006.tiff
+In GetSortedFiles
+Using /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200920T053531_20200920T053558_034438_04019B_C8D9.SAFE/annotation
+Annotations found for /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200920T053531_20200920T053558_034438_04019B_C8D9.SAFE/annotation
+0: /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200920T053531_20200920T053558_034438_04019B_C8D9.SAFE/annotation/s1a-iw1-slc-vv-20200920t053533-20200920t053558-034438-04019b-004.xml
+1: /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200920T053531_20200920T053558_034438_04019B_C8D9.SAFE/annotation/s1a-iw2-slc-vv-20200920t053531-20200920t053556-034438-04019b-005.xml
+2: /home/ubuntu/insar/testset/SLC/S1A_IW_SLC__1SDV_20200920T053531_20200920T053558_034438_04019B_C8D9.SAFE/annotation/s1a-iw3-slc-vv-20200920t053532-20200920t053557-034438-04019b-006.xml
+Start XML Parsing
+Done XML Parsing
+Parameter Initialization done
+In S1_OrbitInitialize
+/home/ubuntu/insar/testset/auxdata/Orbits/Sentinel-1/POEORB/S1A/2020/09/S1A_OPER_AUX_POEORB_OPOD_20200928T121425_V20200907T225942_20200909T005942.EOF
+2020-09-08T05:35:32.725400
+2020-09-08T05:35:57.889520
+S1A
+In S1_OrbitInitialize
+/home/ubuntu/insar/testset/auxdata/Orbits/Sentinel-1/POEORB/S1A/2020/09/S1A_OPER_AUX_POEORB_OPOD_20201010T121243_V20200919T225942_20200921T005942.EOF
+2020-09-20T05:35:33.114435
+2020-09-20T05:35:58.276499
+S1A
+Orbit Initialization done
+DEM Checks done
+Start geometric coregistration on subswath 1 
+ Geometric Coregistration Elapsed Time :113.867
+Finished the Geometrical Coregistration on burst No.1 of SubSwath No.1!
+ Geometric Coregistration Elapsed Time :103.327
+Finished the Geometrical Coregistration on burst No.2 of SubSwath No.1!
+ Geometric Coregistration Elapsed Time :97.9499
+Finished the Geometrical Coregistration on burst No.3 of SubSwath No.1!
+ Geometric Coregistration Elapsed Time :98.1497
+Finished the Geometrical Coregistration on burst No.4 of SubSwath No.1!
+ Geometric Coregistration Elapsed Time :98.9391
+Finished the Geometrical Coregistration on burst No.5 of SubSwath No.1!
+ Geometric Coregistration Elapsed Time :98.8419
+Finished the Geometrical Coregistration on burst No.6 of SubSwath No.1!
+ Geometric Coregistration Elapsed Time :98.5045
+Finished the Geometrical Coregistration on burst No.7 of SubSwath No.1!
+ Geometric Coregistration Elapsed Time :98.1951
+Finished the Geometrical Coregistration on burst No.8 of SubSwath No.1!
+ Geometric Coregistration Elapsed Time :104.818
+Finished the Geometrical Coregistration on burst No.9 of SubSwath No.1!
+Start deramping and resampling on subswath 1 
+kernel duration:22.9327ms
+Finished the Deramping and Resampling on burst No.1 of SubSwath No.1!
+kernel duration:22.9326ms
+Finished the Deramping and Resampling on burst No.2 of SubSwath No.1!
+kernel duration:22.9432ms
+Finished the Deramping and Resampling on burst No.3 of SubSwath No.1!
+kernel duration:22.959ms
+Finished the Deramping and Resampling on burst No.4 of SubSwath No.1!
+kernel duration:22.9615ms
+Finished the Deramping and Resampling on burst No.5 of SubSwath No.1!
+kernel duration:22.96ms
+Finished the Deramping and Resampling on burst No.6 of SubSwath No.1!
+kernel duration:22.9703ms
+Finished the Deramping and Resampling on burst No.7 of SubSwath No.1!
+kernel duration:22.9638ms
+Finished the Deramping and Resampling on burst No.8 of SubSwath No.1!
+kernel duration:22.9722ms
+Finished the Deramping and Resampling on burst No.9 of SubSwath No.1!
+Start ESD and Coherence estimation on subswath 1 
+ESDCorretion duration:84.719ms
+Shift Residual: 0.00275121
+Shift Residual: 0.00402089
+Shift Residual: 0.00322563
+Shift Residual: 0.00285189
+Shift Residual: 0.0038122
+Shift Residual: 0.00492282
+Shift Residual: 0.00451667
+Shift Residual: 0.00367104
+Progress Info:  burst 1  
+coherence kernel duration:36.2561ms
+Progress Info:  burst 2  
+kernel duration:24.1846ms
+Basic coherence kernel duration:31.9384ms
+Progress Info:  burst 3  
+kernel duration:22.9524ms
+Basic coherence kernel duration:31.9324ms
+Progress Info:  burst 4  
+kernel duration:22.9916ms
+Basic coherence kernel duration:31.9013ms
+Progress Info:  burst 5  
+kernel duration:22.9986ms
+Basic coherence kernel duration:31.9118ms
+Progress Info:  burst 6  
+kernel duration:22.9994ms
+Basic coherence kernel duration:31.9407ms
+Progress Info:  burst 7  
+kernel duration:23.0135ms
+Basic coherence kernel duration:31.9445ms
+Progress Info:  burst 8  
+kernel duration:23.0084ms
+Basic coherence kernel duration:31.9448ms
+Progress Info:  burst 9  
+kernel duration:23.0048ms
+Basic coherence kernel duration:31.9355ms
+The coefficients arrays have been Initialized!
+Start geometric coregistration on subswath 2 
+ Geometric Coregistration Elapsed Time :99.3783
+Finished the Geometrical Coregistration on burst No.1 of SubSwath No.2!
+ Geometric Coregistration Elapsed Time :98.5241
+Finished the Geometrical Coregistration on burst No.2 of SubSwath No.2!
+ Geometric Coregistration Elapsed Time :99.9814
+Finished the Geometrical Coregistration on burst No.3 of SubSwath No.2!
+ Geometric Coregistration Elapsed Time :101.578
+Finished the Geometrical Coregistration on burst No.4 of SubSwath No.2!
+ Geometric Coregistration Elapsed Time :102.457
+Finished the Geometrical Coregistration on burst No.5 of SubSwath No.2!
+ Geometric Coregistration Elapsed Time :102.752
+Finished the Geometrical Coregistration on burst No.6 of SubSwath No.2!
+ Geometric Coregistration Elapsed Time :101.059
+Finished the Geometrical Coregistration on burst No.7 of SubSwath No.2!
+ Geometric Coregistration Elapsed Time :101.336
+Finished the Geometrical Coregistration on burst No.8 of SubSwath No.2!
+ Geometric Coregistration Elapsed Time :108.216
+Finished the Geometrical Coregistration on burst No.9 of SubSwath No.2!
+Start deramping and resampling on subswath 2 
+kernel duration:26.8728ms
+Finished the Deramping and Resampling on burst No.1 of SubSwath No.2!
+kernel duration:26.8622ms
+Finished the Deramping and Resampling on burst No.2 of SubSwath No.2!
+kernel duration:26.8725ms
+Finished the Deramping and Resampling on burst No.3 of SubSwath No.2!
+kernel duration:26.8725ms
+Finished the Deramping and Resampling on burst No.4 of SubSwath No.2!
+kernel duration:26.8941ms
+Finished the Deramping and Resampling on burst No.5 of SubSwath No.2!
+kernel duration:26.8726ms
+Finished the Deramping and Resampling on burst No.6 of SubSwath No.2!
+kernel duration:26.8741ms
+Finished the Deramping and Resampling on burst No.7 of SubSwath No.2!
+kernel duration:26.8798ms
+Finished the Deramping and Resampling on burst No.8 of SubSwath No.2!
+kernel duration:26.8804ms
+Finished the Deramping and Resampling on burst No.9 of SubSwath No.2!
+Start ESD and Coherence estimation on subswath 2 
+ESDCorretion duration:103.405ms
+Shift Residual: 0.00275413
+Shift Residual: 0.00265118
+Shift Residual: 0.00271801
+Shift Residual: 0.0031904
+Shift Residual: 0.00331089
+Shift Residual: 0.00430413
+Shift Residual: 0.0042464
+Shift Residual: 0.00421343
+Progress Info:  burst 1  
+coherence kernel duration:42.3871ms
+Progress Info:  burst 2  
+kernel duration:26.8915ms
+Basic coherence kernel duration:37.5432ms
+Progress Info:  burst 3  
+kernel duration:26.9021ms
+Basic coherence kernel duration:37.4182ms
+Progress Info:  burst 4  
+kernel duration:26.9168ms
+Basic coherence kernel duration:37.4628ms
+Progress Info:  burst 5  
+kernel duration:26.8949ms
+Basic coherence kernel duration:37.4521ms
+Progress Info:  burst 6  
+kernel duration:26.8983ms
+Basic coherence kernel duration:37.4547ms
+Progress Info:  burst 7  
+kernel duration:26.9142ms
+Basic coherence kernel duration:37.4679ms
+Progress Info:  burst 8  
+kernel duration:26.9062ms
+Basic coherence kernel duration:37.4332ms
+Progress Info:  burst 9  
+kernel duration:26.9108ms
+Basic coherence kernel duration:37.4513ms
+The coefficients arrays have been Initialized!
+Start geometric coregistration on subswath 3 
+ Geometric Coregistration Elapsed Time :76.8709
+Finished the Geometrical Coregistration on burst No.1 of SubSwath No.3!
+ Geometric Coregistration Elapsed Time :75.8972
+Finished the Geometrical Coregistration on burst No.2 of SubSwath No.3!
+ Geometric Coregistration Elapsed Time :74.4333
+Finished the Geometrical Coregistration on burst No.3 of SubSwath No.3!
+ Geometric Coregistration Elapsed Time :76.1755
+Finished the Geometrical Coregistration on burst No.4 of SubSwath No.3!
+ Geometric Coregistration Elapsed Time :74.3306
+Finished the Geometrical Coregistration on burst No.5 of SubSwath No.3!
+ Geometric Coregistration Elapsed Time :74.503
+Finished the Geometrical Coregistration on burst No.6 of SubSwath No.3!
+ Geometric Coregistration Elapsed Time :76.336
+Finished the Geometrical Coregistration on burst No.7 of SubSwath No.3!
+ Geometric Coregistration Elapsed Time :77.6277
+Finished the Geometrical Coregistration on burst No.8 of SubSwath No.3!
+ Geometric Coregistration Elapsed Time :84.7635
+Finished the Geometrical Coregistration on burst No.9 of SubSwath No.3!
+Start deramping and resampling on subswath 3 
+kernel duration:25.9164ms
+Finished the Deramping and Resampling on burst No.1 of SubSwath No.3!
+kernel duration:25.8923ms
+Finished the Deramping and Resampling on burst No.2 of SubSwath No.3!
+kernel duration:25.8866ms
+Finished the Deramping and Resampling on burst No.3 of SubSwath No.3!
+kernel duration:25.8935ms
+Finished the Deramping and Resampling on burst No.4 of SubSwath No.3!
+kernel duration:25.8269ms
+Finished the Deramping and Resampling on burst No.5 of SubSwath No.3!
+kernel duration:25.8215ms
+Finished the Deramping and Resampling on burst No.6 of SubSwath No.3!
+kernel duration:25.8505ms
+Finished the Deramping and Resampling on burst No.7 of SubSwath No.3!
+kernel duration:25.8494ms
+Finished the Deramping and Resampling on burst No.8 of SubSwath No.3!
+kernel duration:25.8532ms
+Finished the Deramping and Resampling on burst No.9 of SubSwath No.3!
+Start ESD and Coherence estimation on subswath 3 
+ESDCorretion duration:105.406ms
+Shift Residual: 0.0024342
+Shift Residual: 0.00170184
+Shift Residual: 0.00252916
+Shift Residual: 0.00256822
+Shift Residual: 0.00305441
+Shift Residual: 0.00245675
+Shift Residual: 0.00191018
+Shift Residual: 0.00215479
+Progress Info:  burst 1  
+coherence kernel duration:41.2706ms
+Progress Info:  burst 2  
+kernel duration:25.8344ms
+Basic coherence kernel duration:35.9549ms
+Progress Info:  burst 3  
+kernel duration:25.8368ms
+Basic coherence kernel duration:36.0281ms
+Progress Info:  burst 4  
+kernel duration:25.8619ms
+Basic coherence kernel duration:36.1648ms
+Progress Info:  burst 5  
+kernel duration:25.8569ms
+Basic coherence kernel duration:36.1406ms
+Progress Info:  burst 6  
+kernel duration:25.857ms
+Basic coherence kernel duration:36.0057ms
+Progress Info:  burst 7  
+kernel duration:25.8818ms
+Basic coherence kernel duration:36.0939ms
+Progress Info:  burst 8  
+kernel duration:25.8893ms
+Basic coherence kernel duration:36.0165ms
+Progress Info:  burst 9  
+kernel duration:25.8829ms
+Basic coherence kernel duration:36.1085ms
+Finished!

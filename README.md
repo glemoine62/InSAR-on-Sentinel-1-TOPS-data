@@ -16,9 +16,9 @@ The main benefit of the converted code is that **it can run on linux**.
 
 No changes were made to the CUDA code (\*.cu code fragments).
 
-## Test Configuration
+## Test Configurations
 
-Tested on a HP Pavilion laptop with:
+The code was tested on a HP Pavilion laptop with:
 - Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz x8
 - 16 GB RAM
 - GeForce MX250 with 2GB onboard RAM (384 cores)
@@ -26,29 +26,44 @@ Tested on a HP Pavilion laptop with:
 
 The GeForce MX250 is CUDA compute 6.0 compatible.
 
+The code was also deployed on an [AWS p3.2xlarge](https://aws.amazon.com/ec2/instance-types/p3/) cloud instance with:
+- Intel Xeon E5-2686 v4 x8
+- 64 GB RAM
+- V100 Tesla with 16 GB onboard RAM (5120 cores)
+- Ubuntu 18.04.5 LTS
+
+The V100 is CUDA compute 7.0 compatible.
+
 The code processes a Sentinel-1 SLC pair to full resolution coherence for a selection
-of subswaths and bursts. The full scene (3 subswaths with 9 bursts each) are processed
-in about 3 minutes on the test configuration above. That's **impressive** if compared
+of subswaths and bursts. However, several steps are not yet included, in particular  
+debursting and subswath merging and, more importantly, terrain correction.
+
+The full scene (3 subswaths with 9 bursts each) are processed
+in about [3 minutes on the laptop configuration](mx250_run.log) above.
+
+That's **impressive** if compared
 to the [ESA SNAP Sentinel-1 toolbox](https://github.com/senbox-org/s1tbx) based
-coherence processing.
+coherence processing, even though a full performance comparison is not yet
+possible, due to the missing steps.
 
 In fact, it is so fast that the process is no longer compute constrained, but rather
 limited by I/O throughput. The 3 minutes performance is when data read/write is
 from/to an SSD. The same run takes 7 minutes is the data read/write is from/to HDD.
-About 16 GB input is read and 20 GB of output is created.
+About 8 GB input is read and 20 GB of output is created.
 
-However, several steps are not yet included, in particular debursting and subswath merging and,
-more importantly, terrain correction. Thus, a full performance comparison is not yet possible.
+This is confirmed further by the [AWS p3 run, which takes 1m44s](v100_run.log).
+Individual CUDA accelerated processing steps are easily 10 times faster than the
+equivalent steps on the mx250, but the overall process is only twice as fast.
 
-## Requirements:
+## Requirements
 
-### Install tinyxmls2 and gdal dependencies:
+### Install tinyxmls2 and gdal dependencies
 ```
 sudo apt-get install libtinyxml2-6 libtinyxml2-dev
 sudo apt-get install libgdal20 libgdal-dev
 ```
 
-### Install CUDA toolkit:
+### Install CUDA toolkit
 
 Provides the nvcc compiler, relevant numerical libraries and the required header
 cuComplex.h
@@ -81,9 +96,9 @@ Run with:
 ./gpuSNAP
 ```
 
-**NOTE**: I need to exit X windows (Ctrl-Alt-F1) due to GPU computing conflicts (likely memory related).
-When using a GeForce GPU, you cannot switch to TCC mode (on linux).
-Just login normally, and run everything from the command line.
+**NOTE**: I need to exit X windows on my mx250 laptop (Ctrl-Alt-F1 or sudo init 3) due to GPU 
+computing conflicts (likely memory related). When using a GeForce GPU, you cannot
+switch to TCC mode (on linux). Just login normally, and run everything from the command line.
 
 ## Code changes (C++ only):
 
@@ -134,6 +149,5 @@ Various print statements added to help in debugging.
 
 ## TODO
 
-- Run on a cloud instance with a chunky GPU (e.g. AWS p3 with NVIDIA V100 GPU);
 - Change use of cout << "bla bla" << endl to printf;
 - DEM can probably be anything GDAL compliant, not only GeoTIFF. Would be useful to pass in simple VRT compositions of SRTM tiles.

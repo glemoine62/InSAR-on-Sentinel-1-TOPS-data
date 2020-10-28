@@ -37,7 +37,7 @@ The V100 is CUDA compute 7.0 compatible.
 The code processes a Sentinel-1 SLC pair to full resolution coherence for a selection
 of subswaths and bursts. However, several steps are not yet included, in particular debursting and subswath merging and, more importantly, terrain correction.
 
-The pseudo-colored coherence output for subswath is shown below. This is for the
+The pseudo-colored coherence output for subswath 2 is shown below. This is for the
 S1A pair in [the test configuration file](config.txt), which is a descending
 scene over Northern Italy. Lake Maggiore is in the left half of the scene
 (east-west is mirrored, because Sentinel-1 is right looking). Note that the burst

@@ -55,7 +55,7 @@ possible, due to the missing steps.
 
 In fact, it is so fast that the process is no longer compute constrained, but rather
 limited by I/O throughput. The 3 minutes performance is when data read/write is
-from/to an SSD. The same run takes 7 minutes is the data read/write is from/to HDD.
+from/to an SSD. The same run takes 7 minutes if the data read/write is from/to HDD.
 About 8 GB input is read and 20 GB of output is created.
 
 This is confirmed further by the [AWS p3 run, which takes 1m44s](v100_run.log).

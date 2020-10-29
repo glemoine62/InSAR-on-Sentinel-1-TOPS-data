@@ -6,7 +6,7 @@ and contains the POSIX compliant C++ code to run on linux (the original code is 
 
 To understand what the code does, make sure to read the excellent paper:
 
-[GPU accelerated interferometric SAR processing for Sentinel-1 TOPS data" (2019), Computers and Geosciences](https://doi.org/10.1016/j.cageo.2019.04.010).
+[GPU accelerated interferometric SAR processing for Sentinel-1 TOPS data (2019), Computers and Geosciences](https://doi.org/10.1016/j.cageo.2019.04.010).
 
 Only minimum changes have been made to the original C++ code (documented below)
 and primarily related to different file reading of metadata, which is different
@@ -21,7 +21,7 @@ No changes were made to the CUDA code (\*.cu code fragments).
 The code was tested on a HP Pavilion laptop with:
 - Intel(R) Core(TM) i7-1065G7 CPU @ 1.30GHz x8
 - 16 GB RAM
-- GeForce MX250 with 2GB onboard RAM (384 cores)
+- NVIDIA GeForce MX250 with 2GB onboard RAM (384 cores)
 - Ubuntu 18.04.5 LTS
 
 The GeForce MX250 is CUDA compute 6.0 compatible.
@@ -29,7 +29,7 @@ The GeForce MX250 is CUDA compute 6.0 compatible.
 The code was also deployed on an [AWS p3.2xlarge](https://aws.amazon.com/ec2/instance-types/p3/) cloud instance with:
 - Intel Xeon E5-2686 v4 x8
 - 64 GB RAM
-- V100 Tesla with 16 GB onboard RAM (5120 cores)
+- NVIDIA V100 Tesla with 16 GB onboard RAM (5120 cores)
 - Ubuntu 18.04.5 LTS
 
 The V100 is CUDA compute 7.0 compatible.
@@ -61,6 +61,11 @@ About 8 GB input is read and 20 GB of output is created.
 This is confirmed further by the [AWS p3 run, which takes 1m44s](v100_run.log).
 Individual CUDA accelerated processing steps are easily 10 times faster than the
 equivalent steps on the mx250, but the overall process is only twice as fast.
+
+Especially on the V100 there would be the possibility to cache intermediate outputs
+in memory. Also the current code processes the bursts and subswaths sequentially,
+rather than in parallel. Thus, performance on a V100 type GPU should easily be
+within the 30 seconds range, with simple programming efforts.
 
 ## Requirements
 
@@ -136,7 +141,7 @@ Directory scanning GetFiles in Func.cpp needs to be rewritten to POSIX C++ 11.
 Undocumented, but essential, is that ImgFiles and XmlFiles must be found in the
 same naming order, so a scandir() is required. Implemented as GetSortedFiles.
 
-Typos corrected in Func.h|cpp:
+Typos corrected in Func.h and Func.cpp:
 
 ```
 CheckOribtFile -> CheckOrbitFile
